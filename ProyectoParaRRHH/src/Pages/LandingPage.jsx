@@ -1,6 +1,5 @@
 import React from 'react';
-import Navbar from '../components/Navbar';
-import Hero from '../components/Hero';
+import DeloitteHeroSection from '../components/DeloitteHeroSection';
 import InfoCard from '../components/InfoCard';
 import ChatbotPreview from '../components/ChatbotPreview';
 import Footer from '../components/Footer';
@@ -33,12 +32,10 @@ function LandingPage() {
 
   return (
     <div className="app-container">
-      {/* 1. Barra de Navegación Fija */}
-      <Navbar />
+      {/* 1. Deloitte Hero Section (Navbar + Hero integrados) */}
+      <DeloitteHeroSection />
 
       <main className="main-content">
-        {/* 2. Sección Hero de Bienvenida */}
-        <Hero />
 
         {/* 3. Panel de Accesos Rápidos (Tarjetas de Navegación) */}
         <section className="section-container" style={{ padding: '40px 24px 80px 24px' }}>

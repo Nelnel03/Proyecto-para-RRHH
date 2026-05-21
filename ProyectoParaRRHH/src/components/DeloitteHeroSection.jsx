@@ -24,73 +24,97 @@ function DeloitteHeroSection() {
 
             {/* Nav Menu Items */}
             <nav className="deloitte-nav-links">
-              <div className="deloitte-nav-item">
+              <a
+                href="#quienes-somos"
+                className="deloitte-nav-item"
+                style={{ textDecoration: 'none' }}
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.getElementById('quienes-somos')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+              >
                 <span>Quiénes somos</span>
                 <svg className="chevron-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                   <polyline points="6 9 12 15 18 9"></polyline>
                 </svg>
-              </div>
-              <div className="deloitte-nav-item">
+              </a>
+              <a
+                href="#que-hacemos"
+                className="deloitte-nav-item"
+                style={{ textDecoration: 'none' }}
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.getElementById('que-hacemos')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+              >
                 <span>Lo que hacemos</span>
                 <svg className="chevron-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                   <polyline points="6 9 12 15 18 9"></polyline>
                 </svg>
-              </div>
-              <div className="deloitte-nav-item">
+              </a>
+              <a
+                href="#nuestro-enfoque"
+                className="deloitte-nav-item"
+                style={{ textDecoration: 'none' }}
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.getElementById('nuestro-enfoque')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+              >
                 <span>Nuestro Enfoque</span>
                 <svg className="chevron-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                   <polyline points="6 9 12 15 18 9"></polyline>
                 </svg>
-              </div>
-              <div className="deloitte-nav-item">
-                <span>Carreras</span>
+              </a>
+
+              <a
+                href="#consultas"
+                className="deloitte-nav-item"
+                style={{ textDecoration: 'none' }}
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.getElementById('consultas')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+              >
+                <span>Consultas</span>
                 <svg className="chevron-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                   <polyline points="6 9 12 15 18 9"></polyline>
                 </svg>
-              </div>
+              </a>
+              <a
+                href="#vacaciones"
+                className="deloitte-nav-item"
+                style={{ textDecoration: 'none' }}
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.getElementById('vacaciones')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+              >
+                <span>Vacaciones</span>
+                <svg className="chevron-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </a>
+              <a
+                href="#tramites"
+                className="deloitte-nav-item"
+                style={{ textDecoration: 'none' }}
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.getElementById('tramites')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+              >
+                <span>Trámites</span>
+                <svg className="chevron-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </a>
+               
             </nav>
           </div>
 
           {/* Right side utility icons */}
-          <div className="deloitte-nav-right">
-            {/* Search */}
-            <div className="deloitte-utility-item search-btn">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="11" cy="11" r="8"></circle>
-                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-              </svg>
-              <span>Buscar</span>
-            </div>
-
-            {/* MX - ES */}
-            <div className="deloitte-utility-item lang-btn">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="10"></circle>
-                <line x1="2" y1="12" x2="22" y2="12"></line>
-                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-              </svg>
-              <span>MX - ES</span>
-              <svg className="chevron-icon" width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" style={{ marginLeft: '4px' }}>
-                <polyline points="6 9 12 15 18 9"></polyline>
-              </svg>
-            </div>
-
-            {/* Mail */}
-            <div className="deloitte-utility-icon-only">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                <polyline points="22,6 12,13 2,6"></polyline>
-              </svg>
-            </div>
-
-            {/* User Profile */}
-            <div className="deloitte-utility-icon-only">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                <circle cx="12" cy="7" r="4"></circle>
-              </svg>
-            </div>
-          </div>
+          
         </div>
       </header>
 

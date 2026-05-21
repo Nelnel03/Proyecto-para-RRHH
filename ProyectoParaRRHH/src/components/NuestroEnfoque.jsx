@@ -136,43 +136,29 @@ function NuestroEnfoque() {
               >
                 {/* Visual side */}
                 <div className="ne-principle-visual">
-                  <div className="ne-visual-card" style={{ borderColor: `${p.color}33` }}>
+                  <div className="ne-visual-card">
                     {/* large number */}
-                    <span className="ne-visual-number" style={{
-                      background: p.gradient,
-                      WebkitBackgroundClip: 'text',
-                      WebkitTextFillColor: 'transparent',
-                      backgroundClip: 'text',
-                    }}>
+                    <span className="ne-visual-number">
                       {p.number}
                     </span>
-                    {/* icon */}
-                    <div className="ne-visual-icon-wrap" style={{ background: p.gradient }}>
-                      <span className="ne-visual-icon">{p.icon}</span>
-                    </div>
                     {/* decorative dots */}
                     <div className="ne-visual-dots">
                       {[...Array(9)].map((_, i) => (
-                        <span key={i} className="ne-dot"
-                          style={{ background: `${p.color}${i % 3 === 0 ? '60' : '25'}` }} />
+                        <span key={i} className="ne-dot" />
                       ))}
                     </div>
                     {/* glow */}
-                    <div className="ne-visual-glow" style={{ background: p.gradient }} />
+                    <div className="ne-visual-glow" />
                   </div>
                 </div>
 
                 {/* Content side */}
                 <div className="ne-principle-content">
-                  <div className="ne-principle-badge" style={{
-                    background: `${p.color}18`,
-                    border: `1px solid ${p.color}40`,
-                    color: p.color,
-                  }}>
+                  <div className="ne-principle-badge">
                     {p.subtitle}
                   </div>
                   <h3 className="ne-principle-title">
-                    <span className="ne-principle-num" style={{ color: p.color }}>{p.number}.</span>
+                    <span className="ne-principle-num">{p.number}.</span>
                     {p.title}
                   </h3>
                   <p className="ne-principle-intro">{p.intro}</p>
@@ -180,7 +166,7 @@ function NuestroEnfoque() {
                   <ul className="ne-principle-items">
                     {p.items.map((item, i) => (
                       <li key={i} className="ne-pi-item">
-                        <div className="ne-pi-line" style={{ background: p.gradient }} />
+                        <div className="ne-pi-line" />
                         <div>
                           <span className="ne-pi-label">{item.label}: </span>
                           <span className="ne-pi-desc">{item.desc}</span>

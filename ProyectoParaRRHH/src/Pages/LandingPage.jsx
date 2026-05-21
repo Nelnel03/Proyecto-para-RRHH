@@ -218,7 +218,7 @@ function LandingPage() {
                     </div>
                   </div>
 
-                  <div style={{ background: 'rgba(0, 118, 168, 0.08)', border: '1px solid var(--accent-primary)', padding: '14px 16px', borderRadius: '10px', fontSize: '0.88rem' }}>
+                  <div style={{ background: 'rgba(220, 205, 184, 0.08)', border: '1px solid var(--accent-primary)', padding: '14px 16px', borderRadius: '10px', fontSize: '0.88rem' }}>
                     <strong>🛠️ Interfaz del Chat (Recomendación para React/Móvil):</strong><br />
                     Usa botones de respuesta rápida (Quick Replies) apenas se abra la ventana.<br /><br />
                     <em>Ejemplo de flujo de bienvenida:</em><br />

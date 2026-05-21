@@ -67,7 +67,7 @@ function Hero() {
               style={{
                 marginTop: '20px',
                 paddingTop: '15px',
-                borderTop: '1px solid rgba(255, 255, 255, 0.05)',
+                borderTop: '1px solid rgba(0, 0, 0, 0.05)',
                 display: 'flex',
                 justifyContent: 'space-between',
                 fontSize: '0.75rem',

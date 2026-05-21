@@ -25,15 +25,9 @@ Reglas estrictas e inquebrantables:
 5. Responde siempre en español, de forma profesional, clara, precisa y objetiva.
 6. Recuerda que no proporcionas asesoría legal personalizada y que para casos concretos se debe consultar con un abogado o el Ministerio de Trabajo.`;
 
-const QUICK_OPTIONS = [
-  { emoji: '🛡️', text: '¿Qué obligaciones tiene el patrono sobre el ambiente laboral?' },
-  { emoji: '⚠️', text: '¿Qué se considera acoso laboral según el Código de Trabajo?' },
-  { emoji: '🚫', text: '¿Cómo se regula el hostigamiento sexual en el trabajo?' },
-  { emoji: '🏢', text: '¿Cuáles son las condiciones mínimas de seguridad e higiene?' },
-];
-
 // ── Función que llama a Groq (OpenAI compatible) ──────────────────────────────
 async function callGroq(history, userMessage) {
+  // Convertir historial Gemini-style → formato OpenAI
   const messages = [
     { role: 'system', content: SYSTEM_INSTRUCTION },
     ...history.map((msg) => ({
@@ -71,23 +65,33 @@ async function callGroq(history, userMessage) {
   }
 
   const data = await response.json();
-  return data.choices?.[0]?.message?.content || 'No se pudo obtener respuesta.';
+  return data.choices?.[0]?.message?.content || 'Sin respuesta.';
 }
 
-// ── Componente ────────────────────────────────────────────────────────────────
-function ChatbotPreview() {
+// ── Componente Widget Flotante ────────────────────────────────────────────────
+export default function ChatbotWidget() {
+  const [open,      setOpen]      = useState(false);
   const [messages,  setMessages]  = useState([
-    { role: 'bot', text: '¡Hola! Soy tu asistente especializado en el Ambiente Laboral según el Código de Trabajo de Costa Rica 👋\n\nSolo respondo consultas basadas en el Código de Trabajo. ¿En qué puedo ayudarte?' }
+    { role: 'bot', text: '¡Hola! Soy tu asistente especializado en el Ambiente Laboral según el Código de Trabajo de Costa Rica 👋\n¿En qué puedo ayudarte?' }
   ]);
-  const [history,   setHistory]   = useState([]);   // historial para Groq
+  const [history,   setHistory]   = useState([]);
   const [input,     setInput]     = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [unread,    setUnread]    = useState(1);
+
   const messagesEndRef = useRef(null);
   const inputRef       = useRef(null);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages, isLoading]);
+    if (open) {
+      setUnread(0);
+      setTimeout(() => inputRef.current?.focus(), 300);
+    }
+  }, [open]);
+
+  useEffect(() => {
+    if (open) messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages, isLoading, open]);
 
   const sendMessage = async (text) => {
     const userText = (text || input).trim();
@@ -100,15 +104,15 @@ function ChatbotPreview() {
     try {
       const botText = await callGroq(history, userText);
 
-      // Actualizar historial para mantener contexto
       setHistory(prev => [
         ...prev,
         { role: 'user',  parts: [{ text: userText }] },
         { role: 'model', parts: [{ text: botText   }] },
       ]);
       setMessages(prev => [...prev, { role: 'bot', text: botText }]);
+      if (!open) setUnread(u => u + 1);
     } catch (err) {
-      console.error('Groq error:', err);
+      console.error('Groq widget error:', err);
       setMessages(prev => [...prev, {
         role: 'bot',
         text: `⚠️ ${err.message}`,
@@ -116,7 +120,6 @@ function ChatbotPreview() {
       }]);
     } finally {
       setIsLoading(false);
-      inputRef.current?.focus();
     }
   };
 
@@ -130,85 +133,89 @@ function ChatbotPreview() {
     ));
 
   return (
-    <div id="chatbot-preview" style={{ padding: '80px 0', position: 'relative' }}>
-      <div className="section-container" style={{ maxWidth: '900px' }}>
+    <>
+      {/* Panel flotante */}
+      <div className={`cw-panel ${open ? 'cw-panel--open' : ''}`} role="dialog" aria-label="Chat de RRHH">
 
-        <div className="section-header">
-          <div className="badge badge-active">🟢 Chatbot Activo</div>
-          <h2>Asistente Virtual de RRHH</h2>
-          <p>Chatea en tiempo real con nuestro asistente inteligente. Resuelve dudas sobre vacaciones, trámites y normativas las 24 horas del día.</p>
+        {/* Header */}
+        <div className="cw-header">
+          <div className="cw-header-info">
+            <div className="cw-avatar">🤖</div>
+            <div>
+              <p className="cw-title">Asistente RRHH</p>
+              <p className="cw-subtitle"><span className="status-dot"></span> Llama 3.3 70B • Groq</p>
+            </div>
+          </div>
+          <button className="cw-close-btn" onClick={() => setOpen(false)} aria-label="Cerrar chat">✕</button>
         </div>
 
-        <div className="chatbot-preview-container">
-
-          {/* Cabecera */}
-          <div className="chatbot-header">
-            <div className="chatbot-user-status">
-              <div className="chatbot-avatar">🤖</div>
-              <div className="chatbot-info">
-                <h4>Asistente Virtual RRHH</h4>
-                <div className="chatbot-status">
-                  <span className="status-dot"></span>
-                  <span>En línea · Llama 3.3 70B • Groq</span>
-                </div>
-              </div>
+        {/* Mensajes */}
+        <div className="cw-messages">
+          {messages.map((msg, idx) => (
+            <div key={idx} className={`cw-bubble ${msg.role === 'bot' ? 'cw-bubble--bot' : 'cw-bubble--user'} ${msg.isError ? 'bubble-error' : ''}`}>
+              {formatText(msg.text)}
             </div>
-            <div className="badge badge-active" style={{ fontSize: '0.65rem' }}>IA Activa</div>
-          </div>
+          ))}
+          {isLoading && (
+            <div className="cw-bubble cw-bubble--bot typing-indicator">
+              <span></span><span></span><span></span>
+            </div>
+          )}
+          <div ref={messagesEndRef} />
+        </div>
 
-          {/* Mensajes */}
-          <div className="chatbot-messages">
-            {messages.map((msg, idx) => (
-              <div key={idx} className={`chat-bubble ${msg.role === 'bot' ? 'bubble-bot' : 'bubble-user'} ${msg.isError ? 'bubble-error' : ''}`}>
-                {formatText(msg.text)}
-              </div>
-            ))}
-
-            {/* Botones de acceso rápido solo al inicio */}
-            {messages.length === 1 && (
-              <div className="chat-interactive-options">
-                {QUICK_OPTIONS.map((opt, i) => (
-                  <button key={i} className="interactive-option-btn" onClick={() => sendMessage(opt.text)} disabled={isLoading}>
-                    {opt.emoji} {opt.text}
-                  </button>
-                ))}
-              </div>
-            )}
-
-            {/* Typing indicator */}
-            {isLoading && (
-              <div className="chat-bubble bubble-bot typing-indicator">
-                <span></span><span></span><span></span>
-              </div>
-            )}
-            <div ref={messagesEndRef} />
-          </div>
-
-          {/* Input */}
-          <div className="chatbot-input-bar">
-            <input
-              ref={inputRef}
-              id="chatbot-input-field"
-              type="text"
-              className="real-input"
-              placeholder="Escribe tu pregunta sobre RRHH..."
-              value={input}
-              onChange={e => setInput(e.target.value)}
-              onKeyDown={handleKeyDown}
-              disabled={isLoading}
-              autoComplete="off"
-            />
-            <button className="btn-send" onClick={() => sendMessage()} disabled={isLoading || !input.trim()} aria-label="Enviar">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
-              </svg>
-            </button>
-          </div>
-
+        {/* Input */}
+        <div className="cw-input-bar">
+          <input
+            ref={inputRef}
+            id="cw-input"
+            type="text"
+            className="cw-input"
+            placeholder="Escribe tu pregunta..."
+            value={input}
+            onChange={e => setInput(e.target.value)}
+            onKeyDown={handleKeyDown}
+            disabled={isLoading}
+            autoComplete="off"
+          />
+          <button
+            className="btn-send"
+            onClick={() => sendMessage()}
+            disabled={isLoading || !input.trim()}
+            aria-label="Enviar"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="22" y1="2" x2="11" y2="13"/>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+            </svg>
+          </button>
         </div>
       </div>
-    </div>
+
+      {/* Botón flotante FAB */}
+      <button
+        id="chatbot-fab"
+        className={`cw-fab ${open ? 'cw-fab--open' : ''}`}
+        onClick={() => setOpen(o => !o)}
+        aria-label="Abrir asistente de RRHH"
+      >
+        {open ? (
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        ) : (
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          </svg>
+        )}
+        {!open && unread > 0 && (
+          <span className="cw-badge">{unread}</span>
+        )}
+      </button>
+    </>
   );
 }
-
-export default ChatbotPreview;
